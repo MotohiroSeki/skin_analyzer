@@ -4,8 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Skin Analyzer</title>
+    <link
+      rel="stylesheet"
+      href="../src/style/component/buttons.css"
+    />
   </head>
   <body>
+    <button id="camera-button">
+      <img src="../src/pictures/icons/camera_icon.svg" alt="Camera" />
+    </button>
+    <input
+      id="camera-input"
+      type="file"
+      accept="image/*"
+      capture="environment"
+    />
+    <img id="photo" alt="Captured photo" />
+
     <script type="module" src="../src/main.js"></script>
   </body>
 </html>

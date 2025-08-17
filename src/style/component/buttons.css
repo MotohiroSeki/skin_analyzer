@@ -1,0 +1,26 @@
+#camera-button {
+  background-color: #eee;
+  border: none;
+  border-radius: 8px;
+  width: 64px;
+  height: 64px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#camera-button img {
+  width: 32px;
+  height: 32px;
+}
+
+#camera-input {
+  display: none;
+}
+
+#photo {
+  margin-top: 10px;
+  max-width: 100%;
+  display: none;
+}
