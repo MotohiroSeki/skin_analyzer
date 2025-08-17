@@ -1,13 +1,40 @@
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 401px) {
+  #app {
+    width: 400px;
+    height: 720px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+  }
+}
+
 #camera-button {
   background-color: #eee;
   border: none;
   border-radius: 8px;
   width: 64px;
   height: 64px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  transform: translate(-50%, -50%);
 }
 
 #camera-button img {
@@ -20,7 +47,6 @@
 }
 
 #photo {
-  margin-top: 10px;
   max-width: 100%;
   display: none;
 }
