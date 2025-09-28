@@ -1,4 +1,3 @@
-import React from "react";
 import SkinAnalyzer from "./components/SkinAnalyzer.tsx";
 
 export default function App() {

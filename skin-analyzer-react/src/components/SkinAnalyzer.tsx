@@ -1,4 +1,5 @@
 import React, { useRef, useState, useCallback } from "react";
+import cameraIcon from "../assets/pictures/photo_camera_front.svg";
 
 export default function SkinAnalyzer() {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -39,8 +40,22 @@ export default function SkinAnalyzer() {
 
   return (
     <div style={{ display: "grid", gap: 12, maxWidth: 560 }}>
-      <button onClick={() => inputRef.current?.click()} style={{ padding: "12px 16px", borderRadius: 12 }}>
-        カメラ / 画像を選択
+      <button
+        onClick={() => inputRef.current?.click()}
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#f3f4f6",
+          border: "1px solid #d1d5db",
+          cursor: "pointer",
+        }}
+        aria-label="カメラ / 画像を選択"
+      >
+        <img src={cameraIcon} alt="カメラアイコン" style={{ width: 32, height: 32 }} />
       </button>
       <input
         ref={inputRef}
