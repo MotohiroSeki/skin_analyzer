@@ -1,18 +1,20 @@
-name: Build & Deploy to Pages
+name: Build & Deploy to GitHub Pages (Vite, pick branch)
 
 on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Branch or tag to deploy"
+        description: "Branch or tag to deploy (例: main / feature/foo / v1.2.3)"
         required: true
         default: "main"
-        type: string     
+        type: string
 
 permissions:
   contents: read
   pages: write
   id-token: write
+
+run-name: Deploy ${{ inputs.ref }} to GitHub Pages
 
 concurrency:
   group: "pages"
@@ -23,15 +25,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref }}   # ← ここがポイント！選んだブランチ/タグをチェックアウト
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'yarn'
       - run: yarn install --frozen-lockfile
       - run: yarn build
+      - run: cp -f dist/index.html dist/404.html || true
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist   # ← Viteの出力先
+          path: dist
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
