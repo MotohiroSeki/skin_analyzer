@@ -70,8 +70,8 @@ export default function SkinAnalyzer() {
       if (!overlay) return null;
       const rect = overlay.getBoundingClientRect();
       if (!rect.width || !rect.height) return null;
-      const x = clamp(event.clientX - rect.left, 0, rect.width);
-      const y = clamp(event.clientY - rect.top, 0, rect.height);
+      const x = clamp(event.pageX - (rect.left + window.scrollX), 0, rect.width);
+      const y = clamp(event.pageY - (rect.top + window.scrollY), 0, rect.height);
       return { x, y, rect };
     },
     [clamp]
@@ -219,6 +219,8 @@ export default function SkinAnalyzer() {
                 inset: 0,
                 cursor: "crosshair",
                 borderRadius: 12,
+                touchAction: "none",
+                userSelect: "none",
               }}
             >
               {selection && (
