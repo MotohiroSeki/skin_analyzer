@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback } from "react";
 import cameraIcon from "../assets/pictures/photo_camera_front.svg";
+import Modal from "./common/Modal";
 
 type SelectionRect = {
   x: number;
@@ -19,6 +20,7 @@ export default function SkinAnalyzer() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selection, setSelection] = useState<SelectionRect | null>(null);
   const [croppedPreview, setCroppedPreview] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const clamp = useCallback((value: number, min: number, max: number) => {
     return Math.min(Math.max(value, min), max);
@@ -29,6 +31,7 @@ export default function SkinAnalyzer() {
     setCroppedPreview(null);
     dragStartRef.current = null;
     setIsSelecting(false);
+    setIsModalOpen(false);
   }, []);
 
   const onChangeFile = useCallback(async (ev: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,6 +122,7 @@ export default function SkinAnalyzer() {
       if (!img) return;
       if (!finalRect.width || !finalRect.height) {
         setCroppedPreview(null);
+        setIsModalOpen(false);
         return;
       }
       const scaleX = img.naturalWidth / bounds.width;
@@ -129,6 +133,7 @@ export default function SkinAnalyzer() {
       const sourceHeight = Math.round(finalRect.height * scaleY);
       if (!sourceWidth || !sourceHeight) {
         setCroppedPreview(null);
+        setIsModalOpen(false);
         return;
       }
       const canvas = document.createElement("canvas");
@@ -139,6 +144,7 @@ export default function SkinAnalyzer() {
       ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, sourceWidth, sourceHeight);
       const dataUrl = canvas.toDataURL("image/png");
       setCroppedPreview(dataUrl);
+      setIsModalOpen(true);
     },
     []
   );
@@ -214,6 +220,7 @@ export default function SkinAnalyzer() {
               onPointerUp={handlePointerEnd}
               onPointerCancel={handlePointerEnd}
               onPointerLeave={handlePointerEnd}
+              data-testid="selection-overlay"
               style={{
                 position: "absolute",
                 inset: 0,
@@ -241,24 +248,46 @@ export default function SkinAnalyzer() {
           </div>
           <div style={{ fontSize: 14, color: "#4b5563" }}>ドラッグして切り出す範囲を選択してください。</div>
           {croppedPreview && (
-            <div style={{ display: "grid", gap: 8 }}>
-              <div style={{ fontWeight: 600 }}>切り出し結果</div>
-              <img
-                src={croppedPreview}
-                alt="cropped"
-                style={{
-                  width: "100%",
-                  maxWidth: 256,
-                  borderRadius: 12,
-                  border: "1px solid #d1d5db",
-                  background: "#fff",
-                }}
-              />
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              data-testid="open-cropped-modal"
+              style={{
+                justifySelf: "start",
+                padding: "8px 16px",
+                borderRadius: 9999,
+                border: "1px solid #2563eb",
+                background: "#2563eb",
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: 600,
+                fontSize: 14,
+              }}
+            >
+              切り出し結果を表示
+            </button>
           )}
         </div>
       )}
       {err && <div style={{ color: "#c33" }}>{err}</div>}
+      <Modal
+        open={Boolean(isModalOpen && croppedPreview)}
+        onClose={() => setIsModalOpen(false)}
+        title="切り出し結果"
+      >
+        {croppedPreview && (
+          <img
+            src={croppedPreview}
+            alt="切り出し結果"
+            style={{
+              width: "100%",
+              borderRadius: 12,
+              border: "1px solid #d1d5db",
+              background: "#fff",
+            }}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
