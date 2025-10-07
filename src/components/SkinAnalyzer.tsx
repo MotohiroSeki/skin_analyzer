@@ -177,7 +177,15 @@ export default function SkinAnalyzer() {
   );
 
   return (
-    <div style={{ display: "grid", gap: 12, maxWidth: 560 }}>
+    <div
+      style={{
+        display: "grid",
+        gap: 12,
+        maxWidth: 560,
+        justifyItems: "center",
+        width: "100%",
+      }}
+    >
       <button
         onClick={() => inputRef.current?.click()}
         style={{
